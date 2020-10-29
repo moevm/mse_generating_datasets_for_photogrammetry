@@ -2,24 +2,20 @@
 
 #pragma once
 
-
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
-#include <string>
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
-
-#include "MyPawn.generated.h"
-
+#include "MyCamera.generated.h"
 
 UCLASS()
-class MYPROJECT4_API AMyPawn : public APawn
+class APP_API AMyCamera : public APawn
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this pawn's properties
-	AMyPawn();
+	AMyCamera();
 
 protected:
 	// Called when the game starts or when spawned
@@ -32,23 +28,32 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	void MouseYaw(float axis);
-	void MousePitch(float axis);
 
-
-	//Vector
-	FVector2D mouseInput;
+	float DesiredArmLength;
+	FVector angleInput;
+	FVector meshVector;
+	FVector startPositionMesh = { 0.0f, 0.0f, 100.0f };
 
 	UPROPERTY(EditAnywhere)
 		USpringArmComponent* springArm;
+
 	UCameraComponent* camera;
 
 	UPROPERTY(EditAnywhere)
 		UStaticMeshComponent* mesh;
 
 	UFUNCTION(BlueprintCallable)
-		void ReadPosCoord(FString input);
-
+		void SetCameraYaw(float axis);
 	UFUNCTION(BlueprintCallable)
-		void CheckInputData(FString input);
+		void SetCameraPitch(float axis);
+	UFUNCTION(BlueprintCallable)
+		void SetCameraRoll(float axis);
+	UFUNCTION(BlueprintCallable)
+		void SetArmLenght(float axis);
+	UFUNCTION(BlueprintCallable)
+		void SetMeshVectorX(float axis);
+	UFUNCTION(BlueprintCallable)
+		void SetMeshVectorY(float axis);
+	UFUNCTION(BlueprintCallable)
+		void SetMeshVectorZ(float axis);
 };
