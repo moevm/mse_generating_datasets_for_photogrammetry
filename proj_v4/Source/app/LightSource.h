@@ -20,6 +20,7 @@ public:
 	// Sets default values for this pawn's properties
 	ALightSource();
 
+	UFUNCTION(BlueprintCallable)
 	void quickChange_rotation(float value) {
 
 		float a = 3.6 * value;
@@ -31,6 +32,7 @@ public:
 		
 	}
 
+	UFUNCTION(BlueprintCallable)
 	void quickChange_distance(float value) {
 
 		FVector location = this->GetActorLocation();
@@ -52,77 +54,49 @@ public:
 
 	}
 
+	UFUNCTION(BlueprintCallable)
 	void quickChange_height(float value) {
 		
-		float newHeight = value * maxZ / 100.0f;
+		maxZ = 4000;
+		float newHeight = value * maxZ;
 		setCoord_z(newHeight);
-
+		
 	}
 
-	bool setCoord_x(float value) {
+	UFUNCTION(BlueprintCallable)
+		bool setCoord_x(float value);
 
-		FVector location = this->GetActorLocation();
-		location.X = value;
-		this->SetActorLocation(location);
-		return true;
+	UFUNCTION(BlueprintCallable)
+		bool setCoord_y(float value);
 
+	UFUNCTION(BlueprintCallable)
+		bool setCoord_z(float value);
+
+	UFUNCTION(BlueprintCallable)
+		void changeIntensity(float value); 
+
+	UFUNCTION(BlueprintCallable)
+		float getZ() const {
+			FVector location = this->GetActorLocation();
+			return location.Z;
+		}
+
+	UFUNCTION(BlueprintCallable)
+	void changeColor(FString value) {		
+
+		this->myLight->SetLightColor(FColor::FromHex(value));
 	}
 
-	bool setCoord_y(float value) {
+	UFUNCTION(BlueprintCallable)
+		void changeAngle_x(float value);
 
-		FVector location = this->GetActorLocation();
-		location.Y = value;
-		this->SetActorLocation(location);
-		return true;
+	UFUNCTION(BlueprintCallable)
+		void changeAngle_y(float value);
 
-	}
+	UFUNCTION(BlueprintCallable)
+		void changeAngle_z(float value);
 
-	bool setCoord_z(float value) {
-
-		if (value > maxZ)
-			return false;
-
-		FVector location = this->GetActorLocation();
-		location.Z = value;
-		this->SetActorLocation(location);
-		return true;
-
-	}
-
-	void changeIntensity(float brightness) {
-
-		//пересчитать проценты в значения
-		this->myLight->SetLightBrightness(brightness);
-
-	}
-
-	void changeColor(float r, float g, float b) {
-
-		//возможно получаем цвет в 16ричной системе
-		FLinearColor color;
-		color.R = r;
-		color.G = g;
-		color.B = b;
-
-		this->myLight->SetLightColor(color);
-	}
-
-	void changeAngle_x() {
-	
-	}
-	void changeAngle_y() {
-	
-	}
-	void changeAngle_z() {
-	
-	}
-	void setModelPoint(FVector model) {
-
-		modelPoint.X = model.X;
-		modelPoint.Y = model.Y;
-		modelPoint.Z = model.Z;
-
-	}
+	void setModelPoint(FVector model);
 
 protected:
 	// Called when the game starts or when spawned
