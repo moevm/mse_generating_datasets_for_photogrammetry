@@ -2,7 +2,7 @@
 
 
 #include "LightSource.h"
-#include <iostream>
+
 
 // Sets default values
 ALightSource::ALightSource()
@@ -11,7 +11,8 @@ ALightSource::ALightSource()
 	PrimaryActorTick.bCanEverTick = true;	
 	myLight = CreateDefaultSubobject<UDirectionalLightComponent>("myLight");
 	
-	
+	this->myLight->SetLightColor(FLinearColor(246, 255, 236));
+	this->myLight->SetIntensity(100);
 	
 }
 
@@ -19,6 +20,10 @@ ALightSource::ALightSource()
 void ALightSource::BeginPlay()
 {
 	Super::BeginPlay();
+	//F6FFECFF
+	
+	//this->myLight->SetLightBrightness(30);
+	//changeColor(0, 255, 0);
 	
 }
 
@@ -36,3 +41,76 @@ void ALightSource::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 }
 
+void ALightSource::changeIntensity(float value) {
+
+	myLight->SetIntensity(value * 150);
+
+}
+
+bool ALightSource::setCoord_z(float value) {
+
+	/*if (value > maxZ)
+		return false;*/
+
+	FVector location = this->GetActorLocation();
+	location.Z = value;
+	this->SetActorLocation(location);
+	return true;
+
+}
+
+bool ALightSource::setCoord_y(float value) {
+
+	FVector location = this->GetActorLocation();
+	location.Y = value;
+	this->SetActorLocation(location);
+	return true;
+
+}
+
+bool ALightSource::setCoord_x(float value) {
+
+	FVector location = this->GetActorLocation();
+	location.X = value;
+	this->SetActorLocation(location);
+	return true;
+
+}
+
+
+void ALightSource::changeAngle_x(float value) {
+
+	FRotator rotation = this->GetActorRotation();
+	rotation.Roll = value;
+	this->SetActorRotation(rotation);
+
+}
+
+void ALightSource::changeAngle_y(float value) {
+
+	FRotator rotation = this->GetActorRotation();
+	rotation.Pitch = value;
+	this->SetActorRotation(rotation);
+
+}
+
+
+void ALightSource::changeAngle_z(float value) {
+
+	FRotator rotation = this->GetActorRotation();
+	rotation.Yaw = value;
+	this->SetActorRotation(rotation);
+
+}
+
+void ALightSource::setModelPoint(FVector model) {
+
+	/*modelPoint.X = model.X;
+	modelPoint.Y = model.Y;
+	modelPoint.Z = model.Z;*/
+
+	modelPoint.X = 0;
+	modelPoint.Y = 0;
+	modelPoint.Z = 0;
+
+}
