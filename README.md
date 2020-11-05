@@ -28,7 +28,7 @@ Issue tracker (Trello): https://trello.com/b/37KOTgk3/photogrammetry
 
 Подробнее обо всем можно почитать здесь: https://docs.unrealengine.com/en-US/Platforms/Linux/BeginnerLinuxDeveloper/SettingUpAnUnrealWorkflow/index.html
 
-###Для Windows, macOS:
+### Для Windows, macOS:
 
 Для установки Unreal Engine 4 используется Epic Games Launcher. Перейдите на сайт Unreal Engine https://www.unrealengine.com/en-US/ и нажмите на кнопку Get Unreal в правом верхнем углу. Перед загрузкой программы запуска необходимо будет создать учётную запись.
 
