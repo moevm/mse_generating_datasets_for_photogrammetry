@@ -7,13 +7,13 @@
 // Sets default values
 ALightSource::ALightSource()
 {
- 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;	
+	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	PrimaryActorTick.bCanEverTick = true;
 	myLight = CreateDefaultSubobject<UDirectionalLightComponent>("myLight");
-	
+
 	this->myLight->SetLightColor(FLinearColor(246, 255, 236));
 	this->myLight->SetIntensity(100);
-	
+
 }
 
 // Called when the game starts or when spawned
@@ -21,10 +21,10 @@ void ALightSource::BeginPlay()
 {
 	Super::BeginPlay();
 	//F6FFECFF
-	
+
 	//this->myLight->SetLightBrightness(30);
 	//changeColor(0, 255, 0);
-	
+
 }
 
 // Called every frame
@@ -77,6 +77,21 @@ bool ALightSource::setCoord_x(float value) {
 
 }
 
+void ALightSource::quickChange_rotation(float value) {
+
+	float a = 360 * value;
+	FRotator rotator(0, a, 0);
+
+	FVector location = this->GetActorLocation();
+	this->SetActorRotation(FQuat(rotator));
+
+}
+
+
+void ALightSource::changeColor(FString value) {
+
+	this->myLight->SetLightColor(FColor::FromHex(value));
+}
 
 void ALightSource::changeAngle_x(float value) {
 

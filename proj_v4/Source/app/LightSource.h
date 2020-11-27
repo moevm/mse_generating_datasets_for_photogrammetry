@@ -21,46 +21,47 @@ public:
 	ALightSource();
 
 	UFUNCTION(BlueprintCallable)
-	void quickChange_rotation(float value) {
-
-		float a = 3.6 * value;
-		FRotator rotator(0, a, 0);	
-		
-		FRotationMatrix r_matr(rotator);
-		r_matr.MakeFromZ(startPoint);
-
-		
-	}
+		void quickChange_rotation(float value);
 
 	UFUNCTION(BlueprintCallable)
-	void quickChange_distance(float value) {
+		void quickChange_distance(float value) {
 
 		FVector location = this->GetActorLocation();
-		FVector guides_vector = FVector(modelPoint.X - location.X, modelPoint.Y - location.Y, modelPoint.Z - location.Z);
 
-		//float maxLx, maxLy, maxLz;
-		float L = 0.5;//зависит от value
-		/*maxLx = () / modelPoint.X - location.X;
-		maxLy = () / modelPoint.X - location.X;
-		maxLz = () / modelPoint.X - location.X;*/
-		
-		//
-		//L = 
+		float cur_dist = sqrt((location.X - modelPoint.X) * (location.X - modelPoint.X) + (location.Y - modelPoint.Y) * (location.Y - modelPoint.Y) + (location.Z - modelPoint.Z) * (location.Z - modelPoint.Z));
+		float max_dist = 1000, min_dist = 0;
 
-		setCoord_x(location.X + guides_vector.X * L);
-		setCoord_y(location.Y + guides_vector.Y * L);
-		setCoord_z(location.Z + guides_vector.Z * L);
+		float delta = value - (cur_dist / max_dist);
+		FVector guides_vector = FVector(-modelPoint.X + location.X, -modelPoint.Y + location.Y, -modelPoint.Z + location.Z);
+		float newX, newY, newZ;
 
+		if (delta)//расстояние надо увеличивать cur_dist
+		{
+
+		}
+		else//надо уменьшать cur_dist
+		{
+			guides_vector *= -1;
+
+		}
+
+		newX = guides_vector.X * delta + location.X;
+		newY = guides_vector.Y * delta + location.Y;
+		newZ = guides_vector.Z * delta + location.Z;
+
+		setCoord_x(newX);
+		setCoord_y(newY);
+		setCoord_z(newZ);
 
 	}
 
 	UFUNCTION(BlueprintCallable)
-	void quickChange_height(float value) {
-		
+		void quickChange_height(float value) {
+
 		maxZ = 4000;
 		float newHeight = value * maxZ;
 		setCoord_z(newHeight);
-		
+
 	}
 
 	UFUNCTION(BlueprintCallable)
@@ -73,19 +74,16 @@ public:
 		bool setCoord_z(float value);
 
 	UFUNCTION(BlueprintCallable)
-		void changeIntensity(float value); 
+		void changeIntensity(float value);
 
 	UFUNCTION(BlueprintCallable)
 		float getZ() const {
-			FVector location = this->GetActorLocation();
-			return location.Z;
-		}
+		FVector location = this->GetActorLocation();
+		return location.Z;
+	}
 
 	UFUNCTION(BlueprintCallable)
-	void changeColor(FString value) {		
-
-		this->myLight->SetLightColor(FColor::FromHex(value));
-	}
+		void changeColor(FString value);
 
 	UFUNCTION(BlueprintCallable)
 		void changeAngle_x(float value);
@@ -96,13 +94,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void changeAngle_z(float value);
 
-	void setModelPoint(FVector model);
+	UFUNCTION(BlueprintCallable)
+		void setModelPoint(FVector model);
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -113,9 +112,9 @@ private:
 	FVector startPoint;
 	FVector modelPoint;
 	float maxZ, maxY, maxX;
-	
 
-		UPROPERTY(VisibleAnywhere)
-			UDirectionalLightComponent* myLight;
+
+	UPROPERTY(VisibleAnywhere)
+		UDirectionalLightComponent* myLight;
 
 };
