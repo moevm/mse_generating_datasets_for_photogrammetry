@@ -29,7 +29,7 @@ AMyCamera::AMyCamera()
 void AMyCamera::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 // Called every frame
@@ -39,19 +39,129 @@ void AMyCamera::Tick(float DeltaTime)
 
 	mesh->SetWorldLocation(meshVector);
 
-	FRotator newYaw = GetActorRotation();
-	newYaw.Yaw = angleInput.X;
-	SetActorRotation(newYaw);
+	if (playIt == false)
+	{
+		FRotator newYaw = GetActorRotation();
+		newYaw.Yaw = angleInput.X;
+		endPos.Yaw = angleInput.X;
+		SetActorRotation(newYaw);
 
-	FRotator newRoll = springArm->GetComponentRotation();
-	newRoll.Roll = FMath::Clamp(angleInput.Z, -180.f, 180.f);
-	springArm->SetWorldRotation(newRoll); 
+		/*FRotator newRoll = springArm->GetComponentRotation();
+		newRoll.Roll = FMath::Clamp(angleInput.Z, -180.f, 180.f);
+		endPos.Roll = angleInput.Z;
+		springArm->SetWorldRotation(newRoll);
+		*/
+		FRotator newRoll = GetActorRotation();
+		newRoll.Roll = angleInput.Z;
+		endPos.Roll = angleInput.Z;
+		SetActorRotation(newRoll);
 
-	FRotator newPitch = springArm->GetComponentRotation();
-	newPitch.Pitch = FMath::Clamp(angleInput.Y, -90.f, 0.f);
-	springArm->SetWorldRotation(newPitch);
+		/*FRotator newPitch = GetActorRotation();
+		newPitch.Pitch = angleInput.Y;
+		endPos.Pitch = angleInput.Y;
+		SetActorRotation(newPitch);
+		*/
+		FRotator newPitch = GetActorRotation();
+		//newPitch.Pitch = FMath::Clamp(angleInput.Y, -180.f, 0.f);
+		newPitch.Pitch = angleInput.Y;
+		endPos.Pitch = angleInput.Y;
+		SetActorRotation(newPitch);
+		//springArm->SetWorldRotation(newPitch);
+	}
+	else if (playIt == true)
+	{
+		if (rightIt) {
+			angleInput.X -= 1.0f;
+			FRotator newYawM = GetActorRotation();
+			newYawM.Yaw = angleInput.X;
+			SetActorRotation(newYawM);
+			if (angleInput.X == (endPos.Yaw - 360.f))
+			{
+				ToCancel();
+				StopMoveCamera();
+			}
+		}
+		else if (leftIt) {
+			angleInput.X += 1.0f;
+			FRotator newYawM = GetActorRotation();
+			newYawM.Yaw = angleInput.X;
+			SetActorRotation(newYawM);
+			if (angleInput.X == (endPos.Yaw + 360.f))
+			{
+				ToCancel();
+				StopMoveCamera();
+			}
+		}
+		else if (upIt) {
+				
+				if (angleInput.Y == ((-1.0f)*endPos.Pitch - 180.0f))
+				{
+					angleInput.X = endPos.Yaw + 180.0f;
+					angleInput.Y = endPos.Pitch;
+					ToCancel();
+					StopMoveCamera();
+				}
+				else if ((angleInput.Y > -90.0f ) && (angleInput.Y <= endPos.Pitch)) 
+				{
+					angleInput.Y -= 1.0f;
+					FRotator newPitchM = GetActorRotation();
+					newPitchM.Pitch = angleInput.Y;
+					SetActorRotation(newPitchM);
+					//FRotator newPitch = springArm->GetComponentRotation();
+				}
+				else if ((angleInput.Y <= -90.0f) && (angleInput.Y > (((-1)*endPos.Pitch) - 180.0f)))
+				{
+					angleInput.Y -= 1.0f;
+					FRotator newPitchM = GetActorRotation();
+					newPitchM.Pitch = angleInput.Y;
+					newPitchM.Roll = 180.0f;
+					SetActorRotation(newPitchM);
+				}
+				//newPitchM.Pitch = FMath::Clamp(angleInput.Y, -180.f, 0.f);
+				//springArm->SetWorldRotation(newPitch);
+				
+				
+		}
+		else if (downIt) {
+			angleInput.Y += 1.0f;
+			if (angleInput.Y == (endPos.Pitch + 180.0f))
+			{
+				angleInput.X = endPos.Yaw + 180.0f;
+				angleInput.Y = endPos.Pitch;
 
-	
+				ToCancel();
+				StopMoveCamera();
+			}
+
+			if ((angleInput.Y > 90.0f) && (angleInput.Y <= endPos.Pitch)) {
+				FRotator newPitchM = GetActorRotation();
+				newPitchM.Pitch = angleInput.Y;
+				SetActorRotation(newPitchM);
+				//FRotator newPitch = springArm->GetComponentRotation();
+			}
+			else if ((angleInput.Y < 90.0f) && (angleInput.Y > endPos.Pitch + 180))
+			{
+				FRotator newPitchM = GetActorRotation();
+				newPitchM.Pitch = angleInput.Y;
+				newPitchM.Roll = 180.0f;
+				SetActorRotation(newPitchM);
+			}
+			//newPitchM.Pitch = FMath::Clamp(angleInput.Y, -180.f, 0.f);
+			//springArm->SetWorldRotation(newPitch);
+
+		}
+		else if (urIt) {
+		}
+		else if (ulIt) {
+		}
+		else if (drIt) {
+		}
+		else if (dlIt) {
+		}
+		else if (randIt) {
+		}
+
+	}
 
 	springArm->TargetArmLength = FMath::FInterpTo(springArm->TargetArmLength, DesiredArmLength, DeltaTime, 5.0f);
 }
@@ -62,6 +172,7 @@ void AMyCamera::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
+
 void AMyCamera::SetCameraYaw(float axis)
 {
 	angleInput.X = axis;
@@ -69,7 +180,7 @@ void AMyCamera::SetCameraYaw(float axis)
 
 void AMyCamera::SetCameraPitch(float axis)
 {
-		angleInput.Y = axis * (-1);	
+	angleInput.Y = axis * (-1.0f);
 }
 void AMyCamera::SetCameraRoll(float axis)
 {
@@ -91,7 +202,6 @@ void AMyCamera::SetMeshVectorY(float axis)
 	meshVector.Y = axis;
 }
 
-
 void AMyCamera::SetMeshVectorZ(float axis)
 {
 	if (axis >= 50.f)
@@ -100,3 +210,175 @@ void AMyCamera::SetMeshVectorZ(float axis)
 		axis = 50.f;
 }
 
+
+
+float AMyCamera::GetViewAngleX()
+{
+	return angleInput.X;
+}
+
+float AMyCamera::GetViewAngleY()
+{
+	return (-1)*angleInput.Y;
+}
+
+float AMyCamera::GetViewAngleZ()
+{
+	return angleInput.Z;
+}
+
+float AMyCamera::GetMeshCoordX()
+{
+	return meshVector.X;
+}
+
+float AMyCamera::GetMeshCoordY()
+{
+	return meshVector.Y;
+}
+
+float AMyCamera::GetMeshCoordZ()
+{
+	return meshVector.Z;
+}
+
+
+void AMyCamera::MoveCamera()
+{
+	playIt = true;
+}
+
+void AMyCamera::StopMoveCamera()
+{
+	playIt = false;
+}
+
+void AMyCamera::ToRight()
+{
+	rightIt = true;
+	upIt = false;
+	downIt = false;
+	leftIt = false;
+	ulIt = false;
+	urIt = false;
+	dlIt = false;
+	drIt = false;
+	randIt = false;
+}
+
+void AMyCamera::ToLeft()
+{
+	leftIt = true;
+	rightIt = false;
+	upIt = false;
+	downIt = false;
+	ulIt = false;
+	urIt = false;
+	dlIt = false;
+	drIt = false;
+	randIt = false;
+}
+
+void AMyCamera::ToUp()
+{
+	upIt = true;
+	rightIt = false;
+	downIt = false;
+	leftIt = false;
+	ulIt = false;
+	urIt = false;
+	dlIt = false;
+	drIt = false;
+	randIt = false;
+}
+
+void AMyCamera::ToDown()
+{
+	downIt = true;
+	rightIt = false;
+	upIt = false;
+	leftIt = false;
+	ulIt = false;
+	urIt = false;
+	dlIt = false;
+	drIt = false;
+	randIt = false;
+}
+
+void AMyCamera::ToUR()
+{
+	urIt = true;
+	downIt = false;
+	rightIt = false;
+	upIt = false;
+	leftIt = false;
+	ulIt = false;
+	dlIt = false;
+	drIt = false;
+	randIt = false;
+}
+
+void AMyCamera::ToUL()
+{
+	ulIt = true;
+	downIt = false;
+	rightIt = false;
+	upIt = false;
+	leftIt = false;
+	urIt = false;
+	dlIt = false;
+	drIt = false;
+	randIt = false;
+}
+
+void AMyCamera::ToDL()
+{
+	dlIt = true;
+	downIt = false;
+	rightIt = false;
+	upIt = false;
+	leftIt = false;
+	ulIt = false;
+	urIt = false;
+	drIt = false;
+	randIt = false;
+}
+
+void AMyCamera::ToDR()
+{
+	drIt = true;
+	downIt = false;
+	rightIt = false;
+	upIt = false;
+	leftIt = false;
+	ulIt = false;
+	urIt = false;
+	dlIt = false;
+	randIt = false;
+}
+
+void AMyCamera::ToRand()
+{
+	randIt = true;
+	downIt = false;
+	rightIt = false;
+	upIt = false;
+	leftIt = false;
+	ulIt = false;
+	urIt = false;
+	dlIt = false;
+	drIt = false;
+}
+
+void AMyCamera::ToCancel()
+{
+	randIt = false;
+	downIt = false;
+	rightIt = false;
+	upIt = false;
+	leftIt = false;
+	ulIt = false;
+	urIt = false;
+	dlIt = false;
+	drIt = false;
+}
