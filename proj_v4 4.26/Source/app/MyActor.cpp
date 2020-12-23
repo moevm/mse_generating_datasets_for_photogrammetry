@@ -1,8 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
+#include "MyActor.h"
 #include "Engine/StaticMesh.h"
 #include "UObject/UObjectGlobals.h"
-#include "MyActor.h"
 
 // Sets default values
 AMyActor::AMyActor()

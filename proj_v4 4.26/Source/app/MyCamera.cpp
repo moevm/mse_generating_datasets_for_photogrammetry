@@ -13,6 +13,17 @@ AMyCamera::AMyCamera()
     camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
     mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 
+	PPSettings.DepthOfFieldFocalDistance = 500.0f;
+	PPSettings.CameraISO = 100.0f;
+	PPSettings.DepthOfFieldFstop = 4.0f;
+	PPSettings.DepthOfFieldMinFstop = 4.0f;
+	PPSettings.WhiteTemp = 6500.0f;
+	PPSettings.WhiteTint = 0.0f;
+
+	camera->PostProcessSettings = PPSettings;
+	camera->AspectRatio = aspectRatioImage.GetAspectRatio();
+	
+
     RootComponent = mesh;
     meshVector = startPositionMesh;
 
@@ -147,7 +158,7 @@ void AMyCamera::Tick(float DeltaTime)
 			{
 				angleInput.Y += 1.0f;
 			}
-
+			newPitchM.Yaw = angleInput.X;
 			newPitchM.Pitch = angleInput.Y;
 			SetActorRotation(newPitchM);
 
@@ -211,7 +222,7 @@ void AMyCamera::Tick(float DeltaTime)
 			{
 				angleInput.Y -= 1.0f;
 			}
-
+			newPitchM.Yaw = angleInput.X;
 			newPitchM.Pitch = angleInput.Y;
 			SetActorRotation(newPitchM);
 
@@ -323,8 +334,18 @@ void AMyCamera::Tick(float DeltaTime)
 				StopMoveCamera();
 			}
         }
-        else if (randIt) {
-		// Что тут нужно?
+        else if (stopIt) {
+            //angleInput = { 0.f , 0.f , 0.f };
+            //newAngleActor = angleInput;
+            //SetActorRotation(angleInput);
+            //ToCancel();
+            //StopMoveCamera();
+            FRotator newAngleActor = GetActorRotation();
+            newAngleActor = { 0.0f, 0.0f, 0.0f };
+            angleInput = { 0.0f, 0.0f, 0.0f };
+            SetActorRotation(newAngleActor);
+            ToCancel();
+            StopMoveCamera();
         }
 
     }
@@ -357,7 +378,10 @@ void AMyCamera::SetCameraYaw(float axis)
 
 void AMyCamera::SetCameraPitch(float axis)
 {
-    angleInput.Y = axis * (-1.0f);
+    if(axis > -90.0f && axis < 90.0f) angleInput.Y = axis * (-1);
+    else if (axis > 90.0f) angleInput.Y = 89.0f;
+    else if (axis < -90.0f) angleInput.Y = -89.0f;
+    //angleInput.Y = axis * (-1.0f);
 }
 void AMyCamera::SetCameraRoll(float axis)
 {
@@ -382,6 +406,51 @@ void AMyCamera::SetMeshVectorY(float axis)
 void AMyCamera::SetMeshVectorZ(float axis)
 {
         meshVector.Z = axis;
+}
+
+void AMyCamera::SetFocalDistance(float axis)
+{
+	PPSettings.DepthOfFieldFocalDistance = axis;
+	camera->PostProcessSettings.DepthOfFieldFocalDistance = axis;
+}
+
+void AMyCamera::SetISO(float axis)
+{
+	PPSettings.CameraISO = axis;
+	camera->PostProcessSettings.CameraISO = axis;
+}
+
+void AMyCamera::SetFStop(float axis) {
+	PPSettings.DepthOfFieldFstop = axis;
+	camera->PostProcessSettings.DepthOfFieldFstop = axis;
+}
+
+void AMyCamera::SetMFStop(float axis) {
+	PPSettings.DepthOfFieldMinFstop = axis;
+	camera->PostProcessSettings.DepthOfFieldMinFstop = axis;
+}
+
+void AMyCamera::SetWhiteTemp(float axis) {
+	PPSettings.WhiteTemp = axis;
+	camera->PostProcessSettings.WhiteTemp = axis;
+}
+
+void AMyCamera::SetWhiteTint(float axis) {
+	PPSettings.WhiteTint = axis;
+	camera->PostProcessSettings.WhiteTint = axis;
+}
+void AMyCamera::SetAspectRatioWidth(float axis) {
+	aspectRatioImage.SetWidth(axis);
+	aspectRatioImage.SetAspectRatio();
+}
+void AMyCamera::SetAspectRatioHeight(float axis) {
+	aspectRatioImage.SetHeight(axis);
+	aspectRatioImage.SetAspectRatio();
+}
+
+void AMyCamera::SetAspectRatio() {
+	aspectRatioImage.SetAspectRatio();
+	camera->AspectRatio = aspectRatioImage.GetAspectRatio();
 }
 
 
@@ -416,6 +485,43 @@ float AMyCamera::GetMeshCoordZ()
     return meshVector.Z;
 }
 
+float AMyCamera::GetArmLenght()
+{
+	return DesiredArmLength;
+}
+
+float AMyCamera::GetFocalDistance()
+{
+	return PPSettings.DepthOfFieldFocalDistance;
+}
+
+float AMyCamera::GetISO()
+{
+	return PPSettings.CameraISO;
+}
+
+float AMyCamera::GetFStop() {
+	return PPSettings.DepthOfFieldFstop;
+}
+
+float AMyCamera::GetMFStop() {
+	return PPSettings.DepthOfFieldMinFstop;
+}
+
+float AMyCamera::GetWhiteTemp() {
+	return PPSettings.WhiteTemp;
+}
+
+float AMyCamera::GetWhiteTint() {
+	return PPSettings.WhiteTint;
+}
+float AMyCamera::GetAspectRatioWidth() {
+	return aspectRatioImage.GetWidth();
+}
+float AMyCamera::GetAspectRatioHeight() {
+	return aspectRatioImage.GetHeight();
+}
+
 
 void AMyCamera::MoveCamera(int count)
 {
@@ -443,7 +549,7 @@ void AMyCamera::ToRight()
     urIt = false;
     dlIt = false;
     drIt = false;
-    randIt = false;
+    stopIt = false;
 
     fullAngle = 360;
 }
@@ -458,7 +564,7 @@ void AMyCamera::ToLeft()
     urIt = false;
     dlIt = false;
     drIt = false;
-    randIt = false;
+    stopIt = false;
 
     fullAngle = 360;
 }
@@ -473,7 +579,7 @@ void AMyCamera::ToUp()
     urIt = false;
     dlIt = false;
     drIt = false;
-    randIt = false;
+    stopIt = false;
 
     fullAngle = 180;
 }
@@ -488,7 +594,7 @@ void AMyCamera::ToDown()
     urIt = false;
     dlIt = false;
     drIt = false;
-    randIt = false;
+    stopIt = false;
 
     fullAngle = 180;
 }
@@ -503,7 +609,7 @@ void AMyCamera::ToUR()
     ulIt = false;
     dlIt = false;
     drIt = false;
-    randIt = false;
+    stopIt = false;
 }
 
 void AMyCamera::ToUL()
@@ -516,7 +622,7 @@ void AMyCamera::ToUL()
     urIt = false;
     dlIt = false;
     drIt = false;
-    randIt = false;
+    stopIt = false;
 }
 
 void AMyCamera::ToDL()
@@ -529,7 +635,7 @@ void AMyCamera::ToDL()
     ulIt = false;
     urIt = false;
     drIt = false;
-    randIt = false;
+    stopIt = false;
 }
 
 void AMyCamera::ToDR()
@@ -542,11 +648,11 @@ void AMyCamera::ToDR()
     ulIt = false;
     urIt = false;
     dlIt = false;
-    randIt = false;
+    stopIt = false;
 }
-void AMyCamera::ToRand()
+void AMyCamera::ToStop()
 {
-    randIt = true;
+    stopIt = true;
     downIt = false;
     rightIt = false;
     upIt = false;
@@ -559,7 +665,7 @@ void AMyCamera::ToRand()
 
 void AMyCamera::ToCancel()
 {
-    randIt = false;
+    stopIt = false;
     downIt = false;
     rightIt = false;
     upIt = false;

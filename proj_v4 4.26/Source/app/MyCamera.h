@@ -32,6 +32,49 @@ public:
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 
+
+	struct AspectRatioData {
+	private:
+		float width;
+		float height;
+		float imageAspectRatio;
+
+	public:
+		
+		AspectRatioData() {
+			width = 1920.0f;
+			height = 1080.0f;
+			imageAspectRatio = width / height;
+		}
+
+		void SetWidth(float axis) {
+			width = axis;
+		}
+
+		void SetHeight(float axis) {
+			height = axis;
+		}
+
+		void SetAspectRatio() {
+			imageAspectRatio = width / height;
+		}
+
+		float GetWidth() {
+			return width;
+		}
+
+		float GetHeight() {
+			return height;
+		}
+
+		float GetAspectRatio()
+		{
+			return imageAspectRatio;
+		}
+	};
+
+	AspectRatioData aspectRatioImage;
+
     bool upIt = false;
     bool downIt = false;
     bool leftIt = false;
@@ -40,7 +83,7 @@ public:
     bool urIt = false;
     bool dlIt = false;
     bool drIt = false;
-    bool randIt = false;
+    bool stopIt = false;
     bool playIt = false;
 
 	bool flagForRoll = false;
@@ -53,10 +96,14 @@ public:
     FVector meshVector;
     FVector startPositionMesh = { 0.0f, 0.0f, 100.0f };
 
+	FPostProcessSettings PPSettings;
+	
+
     UPROPERTY(EditAnywhere)
         USpringArmComponent* springArm;
 
-    UCameraComponent* camera;
+	UPROPERTY(EditAnywhere)
+		UCameraComponent* camera;
 
     UPROPERTY(EditAnywhere)
         UStaticMeshComponent* mesh;
@@ -75,6 +122,24 @@ public:
         void SetMeshVectorY(float axis);
     UFUNCTION(BlueprintCallable)
         void SetMeshVectorZ(float axis);
+	UFUNCTION(BlueprintCallable)
+		void SetISO(float axis);
+	UFUNCTION(BlueprintCallable)
+		void SetFocalDistance(float axis);
+	UFUNCTION(BlueprintCallable)
+		void SetFStop(float axis);
+	UFUNCTION(BlueprintCallable)
+		void SetMFStop(float axis);
+	UFUNCTION(BlueprintCallable)
+		void SetWhiteTemp(float axis);
+	UFUNCTION(BlueprintCallable)
+		void SetWhiteTint(float axis);
+	UFUNCTION(BlueprintCallable)
+		void SetAspectRatioWidth(float axis);
+	UFUNCTION(BlueprintCallable)
+		void SetAspectRatioHeight(float axis);
+	UFUNCTION(BlueprintCallable)
+		void SetAspectRatio();
 
     UFUNCTION(BlueprintCallable)
         float GetViewAngleX();
@@ -88,6 +153,25 @@ public:
         float GetMeshCoordY();
     UFUNCTION(BlueprintCallable)
         float GetMeshCoordZ();
+	UFUNCTION(BlueprintCallable)
+		float GetArmLenght();
+	UFUNCTION(BlueprintCallable)
+		float GetISO();
+	UFUNCTION(BlueprintCallable)
+		float GetFocalDistance();
+	UFUNCTION(BlueprintCallable)
+		float GetFStop();
+	UFUNCTION(BlueprintCallable)
+		float GetMFStop();
+	UFUNCTION(BlueprintCallable)
+		float GetWhiteTemp( );
+	UFUNCTION(BlueprintCallable)
+		float GetWhiteTint( );
+	UFUNCTION(BlueprintCallable)
+		float GetAspectRatioWidth( );
+	UFUNCTION(BlueprintCallable)
+		float GetAspectRatioHeight();
+
 
     UFUNCTION(BlueprintCallable)
         void MoveCamera(int screenCount);
@@ -110,7 +194,7 @@ public:
     UFUNCTION(BlueprintCallable)
         void ToDL();
     UFUNCTION(BlueprintCallable)
-        void ToRand();
+        void ToStop();
     UFUNCTION(BlueprintCallable)
         void ToCancel();
     UFUNCTION(BlueprintCallable)
