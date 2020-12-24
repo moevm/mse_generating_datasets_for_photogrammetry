@@ -54,14 +54,19 @@ Issue tracker (Trello): https://trello.com/b/37KOTgk3/photogrammetry
 Для успешного запуска приложения на ОС linux(Ubuntu) необходимо установить драйвер vulkan с помощью специальных комманд.
 
 Инструкция для видеокарт intel и AMD:
+
 $ sudo add-apt-repository ppa:oibaf/graphics-drivers
+
 $ sudo apt update
+
 $ sudo apt upgrade
 
-# apt install libvulkan1 mesa-vulkan-drivers vulkan-utils
+$ apt install libvulkan1 mesa-vulkan-drivers vulkan-utils
 
 Инструкция для Nvidia:
+
 $ sudo add-apt-repository ppa:graphics-drivers/ppa
+
 $ sudo apt upgrade
 
 $ sudo apt install nvidia-graphics-drivers-396 nvidia-settings vulkan vulkan-utils
