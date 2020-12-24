@@ -83,6 +83,47 @@ public:
 	}
 
 	UFUNCTION(BlueprintCallable)
+		float getX() const {
+		FVector location = this->GetActorLocation();
+		return location.X;
+	}
+
+	UFUNCTION(BlueprintCallable)
+		float getY() const {
+		FVector location = this->GetActorLocation();
+		return location.Y;
+	}
+
+	UFUNCTION(BlueprintCallable)
+		float getAngleZ() const {
+		FRotator rotation = this->GetActorRotation();
+		return rotation.Yaw;
+	}
+
+	UFUNCTION(BlueprintCallable)
+		float getAngleX() const {
+		FRotator rotation = this->GetActorRotation();
+		return rotation.Roll;
+	}
+
+	UFUNCTION(BlueprintCallable)
+		float getAngleY() const {
+		FRotator rotation = this->GetActorRotation();		
+		return rotation.Pitch;
+	}
+
+	UFUNCTION(BlueprintCallable)
+		FString getColorOfLight() const {
+		return this->color;
+	}
+
+	UFUNCTION(BlueprintCallable)
+		float getIntens() const {
+		return this->intens;
+	}
+
+
+	UFUNCTION(BlueprintCallable)
 		void changeColor(FString value);
 
 	UFUNCTION(BlueprintCallable)
@@ -112,9 +153,12 @@ private:
 	FVector startPoint;
 	FVector modelPoint;
 	float maxZ, maxY, maxX;
+	float intens;
+	FString color;
 
 
 	UPROPERTY(VisibleAnywhere)
 		UDirectionalLightComponent* myLight;
+
 
 };

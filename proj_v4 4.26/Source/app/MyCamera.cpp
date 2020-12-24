@@ -104,6 +104,11 @@ void AMyCamera::Tick(float DeltaTime)
             }
         }
         else if (leftIt) {
+            screenCount = 4;
+            if (++deltaOfAngle >= fullAngle / screenCount)//пора делать скриншот
+            {
+                deltaOfAngle = 0;
+            }
             angleInput.X += 1.0f;
             FRotator newYawM = GetActorRotation();
             newYawM.Yaw = angleInput.X;
@@ -142,7 +147,11 @@ void AMyCamera::Tick(float DeltaTime)
             //newPitchM.Pitch = FMath::Clamp(angleInput.Y, -180.f, 0.f);
             //springArm->SetWorldRotation(newPitch);
 			*/
-
+            screenCount = 4;
+            if (++deltaOfAngle >= fullAngle / screenCount)//пора делать скриншот
+            {
+                deltaOfAngle = 0;
+            }
 			FRotator newPitchM = GetActorRotation();
 			if (flagForUpDown == false)
 			{
@@ -206,6 +215,11 @@ void AMyCamera::Tick(float DeltaTime)
 				SetActorRotation(newPitchM2);
 			}
 			*/
+            screenCount = 4;
+            if (++deltaOfAngle >= fullAngle / screenCount)//пора делать скриншот
+            {
+                deltaOfAngle = 0;
+            }
 
 			FRotator newPitchM = GetActorRotation();
 			if (flagForUpDown == false)
@@ -238,6 +252,13 @@ void AMyCamera::Tick(float DeltaTime)
 
         }
         else if (urIt) {
+
+            screenCount = 4;
+            if (++deltaOfAngle >= fullAngle / screenCount)//пора делать скриншот
+            {
+                deltaOfAngle = 0;
+            }
+
 			angleInput.X -= 1.0f;
 			FRotator newAngleActor = GetActorRotation();
 
@@ -263,6 +284,13 @@ void AMyCamera::Tick(float DeltaTime)
 
 		}
         else if (ulIt) {
+
+            screenCount = 4;
+            if (++deltaOfAngle >= fullAngle / screenCount)//пора делать скриншот
+            {
+                deltaOfAngle = 0;
+            }
+
 			angleInput.X += 1.0f;
 			FRotator newAngleActor = GetActorRotation();
 	
@@ -287,6 +315,13 @@ void AMyCamera::Tick(float DeltaTime)
 			}
         }
         else if (drIt) {
+
+            screenCount = 4;
+            if (++deltaOfAngle >= fullAngle / screenCount)//пора делать скриншот
+            {
+                deltaOfAngle = 0;
+            }
+
 			angleInput.X -= 1.0f;
 			FRotator newAngleActor = GetActorRotation();
 
@@ -311,6 +346,13 @@ void AMyCamera::Tick(float DeltaTime)
 			}
         }
         else if (dlIt) {
+
+            screenCount = 4;
+            if (++deltaOfAngle >= fullAngle / screenCount)//пора делать скриншот
+            {
+                deltaOfAngle = 0;
+            }
+
 			angleInput.X += 1.0f;
 			FRotator newAngleActor = GetActorRotation();
 
@@ -355,8 +397,7 @@ void AMyCamera::Tick(float DeltaTime)
 
 bool AMyCamera::MakeDataset()
 {
-    // FViewport->TakeHighResScreenshot();
-    //вычисление делать скриншот или нет
+   //вычисление делать скриншот или нет
     if (!deltaOfAngle && playIt && fullAngle)
         return true;
 
@@ -581,7 +622,7 @@ void AMyCamera::ToUp()
     drIt = false;
     stopIt = false;
 
-    fullAngle = 180;
+    fullAngle = 178;
 }
 
 void AMyCamera::ToDown()
@@ -596,7 +637,7 @@ void AMyCamera::ToDown()
     drIt = false;
     stopIt = false;
 
-    fullAngle = 180;
+    fullAngle = 178;
 }
 
 void AMyCamera::ToUR()
@@ -610,6 +651,8 @@ void AMyCamera::ToUR()
     dlIt = false;
     drIt = false;
     stopIt = false;
+
+    fullAngle = 180;
 }
 
 void AMyCamera::ToUL()
@@ -623,6 +666,8 @@ void AMyCamera::ToUL()
     dlIt = false;
     drIt = false;
     stopIt = false;
+
+    fullAngle = 180;
 }
 
 void AMyCamera::ToDL()
@@ -636,6 +681,8 @@ void AMyCamera::ToDL()
     urIt = false;
     drIt = false;
     stopIt = false;
+
+    fullAngle = 180;
 }
 
 void AMyCamera::ToDR()
@@ -649,6 +696,8 @@ void AMyCamera::ToDR()
     urIt = false;
     dlIt = false;
     stopIt = false;
+
+    fullAngle = 180;
 }
 void AMyCamera::ToStop()
 {

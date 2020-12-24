@@ -12,7 +12,10 @@ ALightSource::ALightSource()
 	myLight = CreateDefaultSubobject<UDirectionalLightComponent>("myLight");
 
 	this->myLight->SetLightColor(FLinearColor(246, 255, 236));
+	//this->color = FLinearColor(246, 255, 236);
+	this->color = "FFFFFFFF";
 	this->myLight->SetIntensity(100);
+	intens = 100;
 
 }
 
@@ -44,6 +47,7 @@ void ALightSource::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 void ALightSource::changeIntensity(float value) {
 
 	myLight->SetIntensity(value * 150);
+	intens = value * 150;
 
 }
 
@@ -91,6 +95,7 @@ void ALightSource::quickChange_rotation(float value) {
 void ALightSource::changeColor(FString value) {
 
 	this->myLight->SetLightColor(FColor::FromHex(value));
+	color = value;
 }
 
 void ALightSource::changeAngle_x(float value) {
