@@ -23,6 +23,7 @@ protected:
     float deltaOfAngle;
     float fullAngle;
     float screenCount;
+    int numbers;
 
 public:
     // Called every frame

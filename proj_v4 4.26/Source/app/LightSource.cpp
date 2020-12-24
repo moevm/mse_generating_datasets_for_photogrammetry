@@ -15,7 +15,7 @@ ALightSource::ALightSource()
 	//this->color = FLinearColor(246, 255, 236);
 	this->color = "FFFFFFFF";
 	this->myLight->SetIntensity(100);
-	intens = 100;
+	intens = 100.0/150;
 
 }
 
@@ -47,7 +47,7 @@ void ALightSource::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 void ALightSource::changeIntensity(float value) {
 
 	myLight->SetIntensity(value * 150);
-	intens = value * 150;
+	intens = value;
 
 }
 
