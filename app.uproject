@@ -1,0 +1,16 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{FBB0DB26-4EED-EDE5-9094-E39F9EAF2528}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "app",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine"
+			]
+		}
+	]
+}
