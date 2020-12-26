@@ -48,3 +48,27 @@ Issue tracker (Trello): https://trello.com/b/37KOTgk3/photogrammetry
 P.S.В текущей версии загружен прототип алгоритма скринига. В целях тестирования количество снимков задано фиксированным числом в коде, съемка происходит для траектории right.
 
 Настройки сцены можно изменять как вручную(для координат источника освещения и камеры, углов, цвета освещения и т.д.), так и с помощью ползунков быстрых настроек(R - поворот, D - дистанция, H - высота).
+
+## Подготовка к запуску программы вне среды ##
+
+Для успешного запуска приложения на ОС linux(Ubuntu) необходимо установить драйвер vulkan с помощью специальных комманд.
+
+Инструкция для видеокарт intel и AMD:
+
+$ sudo add-apt-repository ppa:oibaf/graphics-drivers
+
+$ sudo apt update
+
+$ sudo apt upgrade
+
+$ apt install libvulkan1 mesa-vulkan-drivers vulkan-utils
+
+Инструкция для Nvidia:
+
+$ sudo add-apt-repository ppa:graphics-drivers/ppa
+
+$ sudo apt upgrade
+
+$ sudo apt install nvidia-graphics-drivers-396 nvidia-settings vulkan vulkan-utils
+
+Инструкцию для других дистрибутивов можно получить на сайте https://linuxconfig.org/install-and-test-vulkan-on-linux
